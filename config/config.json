@@ -1,0 +1,36 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "nodejs-testing",
+    "host": "localhost",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "charset": "utf8_general_ci",
+      "collate": "utf8_general_ci"
+    },
+    "logging": false
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "nodejs-testing_test",
+    "host": "localhost",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "charset": "utf8_general_ci",
+      "collate": "utf8_general_ci"
+    }
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "nodejs-testing_production",
+    "host": "localhost",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "charset": "utf8_general_ci",
+      "collate": "utf8_general_ci"
+    }
+  }
+}

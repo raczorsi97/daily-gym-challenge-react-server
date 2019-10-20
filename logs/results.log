@@ -1,0 +1,92 @@
+{"level":"info","message":"ize Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): DROP TABLE IF EXISTS `users`;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): DROP TABLE IF EXISTS `users`;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
+{"level":"info","message":"Executing (default): SELECT 1+1 AS result"}
+{"level":"info","message":"Executing (default): CREATE TABLE IF NOT EXISTS `users` (`id` INTEGER NOT NULL auto_increment , `username` VARCHAR(255), `firstName` VARCHAR(255), `lastName` VARCHAR(255), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;"}
+{"level":"info","message":"Executing (default): SELECT `id`, `username`, `firstName`, `lastName`, `createdAt`, `updatedAt` FROM `users` AS `user` WHERE `user`.`username` = 'David';"}
+{"level":"info","message":"Executing (default): SHOW INDEX FROM `users`"}
