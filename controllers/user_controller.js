@@ -8,12 +8,14 @@ router.post('/login', function (request, response) {
     const data = request.body;
 
     if (userService.isValidLogin(data)) {
-        userService.login(data).then((result) => {
-            response.status(200).json({token: result});
-        }, error => {
-            response.status(403).json({"error": error.message});
+        userService.login(data).then(
+            result => {
+                response.status(200).json(result);
+            }, 
+            error => {
+                response.status(403).json({ message: error.message, field: error.field });
         }).catch((error) => {
-            response.status(500).json({"error": error.message});
+            response.status(500).json({message: error.message});
         });
     } else {
         response.status(500).json({"error": "missing fields"});
@@ -25,7 +27,7 @@ router.post('/register', function (request, response) {
 
     if (userService.isValidRegister(data)) {
         userService.register(data).then((result) => {
-            response.status(200).json({token: result});
+            response.status(200).json(result);
         }, error => {
             response .status(422).json({ field : error.field, message: error.message });
         }).catch((error) => {
@@ -37,8 +39,6 @@ router.post('/register', function (request, response) {
 });
 
 router.get('/all', /*jwtService.verifyToken, */ function (request, response) {
-    console.log(request.decoded);
-
     userService.getAllUsers().then((users) => {
         response.status(200).json({ "users": users});
     }).catch((error) => {

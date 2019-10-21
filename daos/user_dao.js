@@ -2,14 +2,14 @@ const users = require('../mocks/users');
 
 async function findUser(username, password) {
     return users.find((user) => {
-        return (user.username === username && user.password === password);
+        return (user.username === username);
     })
 }
 
 async function saveUser(user) {
-    let id = users[users.length - 1].id + 1;
-    user.id = id;
-    return users.push(user);
+    user.id =  users[users.length - 1].id + 1;
+    users.push(user)
+    return user;
 }
 
 async function getAllUsers() {

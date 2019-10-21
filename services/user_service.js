@@ -19,41 +19,58 @@ function isDataExists(field) {
     return (!lodash.isUndefined(field) && !lodash.isEmpty(field.trim()));
 }
 
+function createError(field, message) {
+    let error = new Error(message);
+    error.field = field;
+    return error;
+}
+
 
 async function login(data) {
-    return await userDAO.findUser(data.username, data.password)
+    return await userDAO.findUser(data.username)
         .then((user) => {
             if (user == null) {
-                throw new Error("No user found with given username and password");
+                throw createError('username', 'Invalid username');
             }
-            return jwtService.generateUserToken(user);
-        }).catch((error) => {
-            throw new Error(error.message);
+            if (user.password !== data.password) {
+                throw createError('password', 'Invalid credentials');
+            }
+            let token = jwtService.generateUserToken(user);
+            return { user, token };
+        })
+        .catch((error) => {
+            throw error;
         });
 }
 
 async function register(data) {
     return await userDAO.getAllUsers()
         .then((users) => {
+            let emailFormat = new RegExp('^\w+@\w+\..{2,3}(.{2,3})?$');
+            console.log('Huh.... :', data.email);
+            if (!emailFormat.test(data.email)) {
+                console.log('Invalid format...');
+                // throw createError('email', 'Please provide a valid email.');
+            } else {
+                console.log('Matchy matchy');
+            }
             users.find((user) => {
                 if (user.username === data.username) {
-                    let error = new Error('This username is already taken.');
-                    error.field = 'username';
-                    throw error;
+                    throw createError('username', 'This username is already taken.');
                 }
                 if (user.email === data.email) {
-                    let error = new Error('This email is already registered.');
-                    error.field = 'email';
-                    throw error;
+                    throw createError('email', 'This email is already registered.');
                 }
             });
-        }).then(() => {
+        })
+        .then(() => {
             return userDAO.saveUser(data).then((user) => {
-                return jwtService.generateUserToken(user);
+                let token = jwtService.generateUserToken(user);
+                return { token, user };
             }).catch((error) => {
                 throw new Error(error.message);
             });
-    });
+        });
 }
 
 async function getAllUsers() {
