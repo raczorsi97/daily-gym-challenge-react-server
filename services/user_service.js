@@ -46,15 +46,12 @@ async function login(data) {
 async function register(data) {
     return await userDAO.getAllUsers()
         .then((users) => {
-            let emailFormat = new RegExp('^\w+@\w+\..{2,3}(.{2,3})?$');
-            console.log('Huh.... :', data.email);
-            if (!emailFormat.test(data.email)) {
-                console.log('Invalid format...');
-                // throw createError('email', 'Please provide a valid email.');
-            } else {
-                console.log('Matchy matchy');
-            }
+            let emailFormat = new RegExp('^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$');
             users.find((user) => {
+                if (!emailFormat.test(data.email)) {
+                    console.log('Invalid format...');
+                    throw createError('email', 'Please provide a valid email.');
+                }
                 if (user.username === data.username) {
                     throw createError('username', 'This username is already taken.');
                 }
@@ -62,8 +59,10 @@ async function register(data) {
                     throw createError('email', 'This email is already registered.');
                 }
             });
+            console.log('Za shit');
         })
         .then(() => {
+            console.log('Lalalala...');
             return userDAO.saveUser(data).then((user) => {
                 let token = jwtService.generateUserToken(user);
                 return { token, user };

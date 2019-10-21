@@ -15,10 +15,10 @@ router.post('/login', function (request, response) {
             error => {
                 response.status(403).json({ message: error.message, field: error.field });
         }).catch((error) => {
-            response.status(500).json({message: error.message});
+            response.status(500).json({ message: error.message });
         });
     } else {
-        response.status(500).json({"error": "missing fields"});
+        response.status(500).json({ 'error': 'missing fields' });
     }
 });
 
@@ -34,25 +34,23 @@ router.post('/register', function (request, response) {
             response.status(500).json({ field : error.field, message: error.message });
         });
     } else {
-        response.status(500).json({"error": "missing fields"});
+        response.status(500).json({ 'error': 'missing fields' });
     }
 });
 
-router.get('/all', /*jwtService.verifyToken, */ function (request, response) {
+router.get('/all', function (request, response) {
     userService.getAllUsers().then((users) => {
-        response.status(200).json({ "users": users});
+        response.status(200).json({ 'users': users });
     }).catch((error) => {
-        response.status(500).json({"error": error.message});
+        response.status(500).json({ 'error': error.message });
     });
 });
 
-router.get('/all/posts', jwtService.verifyToken, function (request, response) {
-    console.log(request.decoded);
-
+router.get('/all/posts', function (request, response) {
     userService.getAllUsersWithAllPosts().then((users) => {
-        response.status(200).json({ "users": users});
+        response.status(200).json({ 'users': users });
     }).catch((error) => {
-        response.status(500).json({"error": error.message});
+        response.status(500).json({ 'error': error.message });
     });
 });
 
