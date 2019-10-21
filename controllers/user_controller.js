@@ -27,10 +27,9 @@ router.post('/register', function (request, response) {
         userService.register(data).then((result) => {
             response.status(200).json({token: result});
         }, error => {
-            console.log('Error :', error.message);
-            response.status(403).json({"error": error.message});
+            response .status(422).json({ field : error.field, message: error.message });
         }).catch((error) => {
-            response.status(500).json({"error": error.message});
+            response.status(500).json({ field : error.field, message: error.message });
         });
     } else {
         response.status(500).json({"error": "missing fields"});

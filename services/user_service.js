@@ -37,10 +37,14 @@ async function register(data) {
         .then((users) => {
             users.find((user) => {
                 if (user.username === data.username) {
-                    throw new Error('This username is already taken.');
+                    let error = new Error('This username is already taken.');
+                    error.field = 'username';
+                    throw error;
                 }
                 if (user.email === data.email) {
-                    throw new Error('This email is already registered.');
+                    let error = new Error('This email is already registered.');
+                    error.field = 'email';
+                    throw error;
                 }
             });
         }).then(() => {
