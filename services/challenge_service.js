@@ -9,6 +9,16 @@ async function getAllChallenges() {
         });
 }
 
+async function getChallengeById(id) {
+    return await challengeDAO.getChallengeById(id)
+        .then((challenge) => {
+            return challenge;
+        }).catch((error) => {
+            throw new Error(error.message);
+        });
+}
+
 module.exports = {
     getAllChallenges
+    , getChallengeById
 }
