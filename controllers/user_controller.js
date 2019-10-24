@@ -54,4 +54,27 @@ router.get('/all/posts', function (request, response) {
     });
 });
 
+router.get('/:userId/challenges', function (request, response) {
+    let userId = request.params.userId ;
+    userService.getUsersChallenges(userId)
+        .then((challenges) => {
+            response.status(200).json(challenges);
+         }).catch((error) => {
+            response.status(500).json({ 'error': error.message });
+        });
+});
+
+router.post('/:userId/challenge/:challengeId', function (request, response) {
+    let userId = request.params.userId
+        , challengeId = request.params.challengeId
+    ;
+    userService.addChallengeToUser(userId, challengeId)
+        .then((user) => {
+            response.status(200).json(user);
+         }).catch((error) => {
+            console.log('The error :', error);
+            response.status(500).json(error);
+        });
+});
+
 module.exports = router;

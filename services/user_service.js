@@ -59,10 +59,8 @@ async function register(data) {
                     throw createError('email', 'This email is already registered.');
                 }
             });
-            console.log('Za shit');
         })
         .then(() => {
-            console.log('Lalalala...');
             return userDAO.saveUser(data).then((user) => {
                 let token = jwtService.generateUserToken(user);
                 return { token, user };
@@ -80,19 +78,32 @@ async function getAllUsers() {
     });
 }
 
-async function getAllUsersWithAllPosts() {
-    return await userDAO.getAllUsersWithAllPosts().then((users) => {
-        return users;
-    }).catch((error) => {
-        throw new Error(error.message);
-    });
+async function addChallengeToUser(userId, challengeId) {
+    return await userDAO.addChallengeToUser(userId, challengeId)
+        .then((user) => {
+            return user;
+        }).catch((error) => {
+            console.log('We have an error :', error.message);
+            throw error.message;
+        });
+}
+
+async function getUsersChallenges(userId) {
+    return await userDAO.getUsersChallenges(userId)
+        .then((challenges) => {
+            return challenges;
+        }).catch((error) => {
+            throw new Error(error.message);
+        }
+    );
 }
 
 module.exports = {
-    login,
-    register,
-    isValidLogin,
-    isValidRegister,
-    getAllUsers,
-    getAllUsersWithAllPosts
+    login
+    , register
+    , isValidLogin
+    , isValidRegister
+    , getAllUsers
+    , addChallengeToUser
+    , getUsersChallenges
 }
