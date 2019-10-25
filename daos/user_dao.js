@@ -29,21 +29,47 @@ async function addChallengeToUser(userId, challengeId) {
         }
         return false;
     });
+}
+
+async function removeUsersChallenge(userId, challengeId) {
+    return users.find((user) => {
+        if (user.id == userId) {
+            let index = user.challenges.indexOf(challengeId.toString());
+            user.challenges.splice(index, 1);
+            return user;
+        }
+        return false;
+    });
 } 
 
 async function getUsersChallenges(userId) {
-    return users.find((user) => {
-        if (user.id === userId) {
-            return user.challenges;
+    let user = users.find((user) => {
+        if (user.id == userId) {
+            return user;
         }
-        return {};
+        return false;
     });
+    return user.challenges;
+}
+
+async function hasUserChallenge(userId, challengeId) {
+    let user = users.find((user) => {
+        if (user.id == userId) {
+            if (user.challenges.includes(challengeId)) {
+                return true;
+            };
+        }
+        return false;
+    });
+    return !!user;
 }
 
 module.exports = {
-    findUser,
-    saveUser,
-    getAllUsers,
-    addChallengeToUser,
-    getUsersChallenges
+    findUser
+    , saveUser
+    , getAllUsers
+    , addChallengeToUser
+    , getUsersChallenges
+    , hasUserChallenge
+    , removeUsersChallenge
 }

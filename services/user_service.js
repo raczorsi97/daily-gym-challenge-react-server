@@ -49,7 +49,7 @@ async function register(data) {
             let emailFormat = new RegExp('^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$');
             users.find((user) => {
                 if (!emailFormat.test(data.email)) {
-                    console.log('Invalid format...');
+    
                     throw createError('email', 'Please provide a valid email.');
                 }
                 if (user.username === data.username) {
@@ -83,7 +83,15 @@ async function addChallengeToUser(userId, challengeId) {
         .then((user) => {
             return user;
         }).catch((error) => {
-            console.log('We have an error :', error.message);
+            throw error.message;
+        });
+}
+
+async function removeUsersChallenge(userId, challengeId) {
+    return await userDAO.removeUsersChallenge(userId, challengeId)
+        .then((user) => {
+            return user;
+        }).catch((error) => {
             throw error.message;
         });
 }
@@ -93,7 +101,17 @@ async function getUsersChallenges(userId) {
         .then((challenges) => {
             return challenges;
         }).catch((error) => {
-            throw new Error(error.message);
+            throw error.message;
+        }
+    );
+}
+
+async function hasUserChallenge(userId, challengeId) {
+    return await userDAO.hasUserChallenge(userId, challengeId)
+        .then((resp) => {
+            return resp;
+        }).catch((error) => {
+            throw error.message;
         }
     );
 }
@@ -106,4 +124,6 @@ module.exports = {
     , getAllUsers
     , addChallengeToUser
     , getUsersChallenges
+    , hasUserChallenge
+    , removeUsersChallenge
 }

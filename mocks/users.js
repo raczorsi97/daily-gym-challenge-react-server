@@ -5,7 +5,7 @@ const users = [
         'username': 'test',
         'password': 'test',
         'email': 'deby@gmail.com',
-        'challenges': []
+        'challenges': ['1']
     },
     {
         'id': 2,
