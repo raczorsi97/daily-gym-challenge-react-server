@@ -21,7 +21,8 @@ async function getAllUsers() {
 async function addChallengeToUser(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            if (user.challenges.includes(challengeId)) {
+            let ch = user.challenges.find(c => c.id == challengeId);
+            if (ch) {
                 throw new Error('The user already has this challenge!');
             };
             let challenge = challenges.find(c => c.id == challengeId);
