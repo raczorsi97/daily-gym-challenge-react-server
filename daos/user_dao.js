@@ -1,5 +1,5 @@
 const users = require('../mocks/users')
-    challenges = require('../mocks/users')
+    challenges = require('../mocks/challenges')
 ;
 
 async function findUser(username, password) {
@@ -24,7 +24,8 @@ async function addChallengeToUser(userId, challengeId) {
             if (user.challenges.includes(challengeId)) {
                 throw new Error('The user already has this challenge!');
             };
-            user.challenges.push(challengeId);
+            let challenge = challenges.find(c => c.id == challengeId);
+            challenge && user.challenges.push(challenge);
             return user;
         }
         return false;
@@ -34,7 +35,9 @@ async function addChallengeToUser(userId, challengeId) {
 async function removeUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            let index = user.challenges.indexOf(challengeId.toString());
+            let challenge = user.challenges.find( ch => ch.id == challengeId)
+                , index = user.challenges.indexOf(challenge.id.toString())
+            ;
             user.challenges.splice(index, 1);
             return user;
         }
@@ -55,14 +58,15 @@ async function getUsersChallenges(userId) {
 async function hasUserChallenge(userId, challengeId) {
     let user = users.find((user) => {
         if (user.id == userId) {
-            if (user.challenges.includes(challengeId)) {
+            let challenge = user.challenges.find( ch => ch.id == challengeId);
+            if (challenge) {
                 return true;
             };
         }
         return false;
     });
     return !!user;
-}
+} 
 
 module.exports = {
     findUser

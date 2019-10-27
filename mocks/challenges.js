@@ -8,7 +8,7 @@ const challenges = [
         , 'short_description': 'If you think you are strong enough for a good cardio session, we are challenging you to do 60 minutes on stair master......'
         , 'long_description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
         , 'image': 'card_images/stairmaster.png'
-    }
+    } 
     , {
         'id': 2
         , 'title': 'Jumping jack challenge'

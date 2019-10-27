@@ -77,7 +77,6 @@ router.post('/:userId/challenge/:challengeId', function (request, response) {
 });
 
 router.delete('/:userId/challenge/:challengeId', function (request, response) {
-    console.log(request.params);
     let userId = request.params.userId
         , challengeId = request.params.challengeId
     ;
