@@ -26,7 +26,8 @@ async function addChallengeToUser(userId, challengeId) {
                 throw new Error('The user already has this challenge!');
             };
             let challenge = challenges.find(c => c.id == challengeId);
-            challenge && user.challenges.push(challenge);
+            user.challenges.push(challenge);
+    
             return user;
         }
         return false;
@@ -36,9 +37,7 @@ async function addChallengeToUser(userId, challengeId) {
 async function removeUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            let challenge = user.challenges.find( ch => ch.id == challengeId)
-                , index = user.challenges.indexOf(challenge.id.toString())
-            ;
+            let index = user.challenges.findIndex(ch => ch.id == challengeId);
             user.challenges.splice(index, 1);
             return user;
         }
