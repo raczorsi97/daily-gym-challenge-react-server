@@ -10,6 +10,7 @@ async function findUser(username, password) {
 
 async function saveUser(user) {
     user.id =  users[users.length - 1].id + 1;
+    user.challenges = [];
     users.push(user)
     return user;
 }
@@ -56,9 +57,13 @@ async function getUsersChallenges(userId) {
 }
 
 async function hasUserChallenge(userId, challengeId) {
+    console.log('UserId :', userId, ' ChallengeId :', challengeId);
     let user = users.find((user) => {
         if (user.id == userId) {
+            console.log('User :', user);
+            console.log('User.challenges :', user.challenges);
             let challenge = user.challenges.find( ch => ch.id == challengeId);
+            console.log('Challenge :', challenge);
             if (challenge) {
                 return true;
             };
