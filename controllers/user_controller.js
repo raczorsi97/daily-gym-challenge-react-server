@@ -71,8 +71,8 @@ router.post('/:userId/challenge/:challengeId', function (request, response) {
     userService.addChallengeToUser(userId, challengeId)
         .then((user) => {
             response.status(200).json(user);
-         }).catch((error) => {
-            response.status(500).json(error);
+        }).catch((error) => {
+            response.status(500).json({ 'error': error }); 
         });
 });
 
@@ -84,7 +84,7 @@ router.delete('/:userId/challenge/:challengeId', function (request, response) {
         .then((user) => {
             response.status(200).json(user);
          }).catch((error) => {
-            response.status(500).json(error);
+            response.status(500).json({ 'error': error });
         });
 });
 
@@ -95,7 +95,7 @@ router.get('/:userId/challenge/:challengeId', function (request, response) {
     userService.hasUserChallenge(userId, challengeId)
         .then((resp) => {
             response.status(200).json(resp);
-         }).catch((error) => {
+        }).catch((error) => {
             response.status(500).json(error);
         });
 });

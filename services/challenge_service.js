@@ -3,9 +3,10 @@ const challengeDAO = require('../daos/challenge_dao');
 async function getAllChallenges() {
     return await challengeDAO.getAllChallenges()
         .then((challenges) => {
+            if (!challenges.length) {
+                throw new Error('There are no challenges :(');
+            }
             return challenges;
-        }).catch((error) => {
-            throw new Error(error.message);
         });
 }
 

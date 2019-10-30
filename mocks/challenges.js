@@ -26,4 +26,5 @@ const challenges = [
         , 'image': 'card_images/burpees.png'
     }
 ];
+// const challenges = [];
 module.exports = challenges;

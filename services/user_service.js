@@ -92,6 +92,7 @@ async function removeUsersChallenge(userId, challengeId) {
         .then((user) => {
             return user;
         }).catch((error) => {
+            console.log('Za error :', error.message);
             throw error.message;
         });
 }

@@ -39,6 +39,9 @@ async function removeUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
             let index = user.challenges.findIndex(ch => ch.id == challengeId);
+            if ( index < 0) {
+                throw new Error('Something went wrong...');
+            }
             user.challenges.splice(index, 1);
             return user;
         }
@@ -57,13 +60,9 @@ async function getUsersChallenges(userId) {
 }
 
 async function hasUserChallenge(userId, challengeId) {
-    console.log('UserId :', userId, ' ChallengeId :', challengeId);
     let user = users.find((user) => {
         if (user.id == userId) {
-            console.log('User :', user);
-            console.log('User.challenges :', user.challenges);
-            let challenge = user.challenges.find( ch => ch.id == challengeId);
-            console.log('Challenge :', challenge);
+            let challenge = user.challenges.find((ch) => ch.id == challengeId); 
             if (challenge) {
                 return true;
             };
