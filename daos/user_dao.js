@@ -39,7 +39,7 @@ async function removeUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
             let index = user.challenges.findIndex(ch => ch.id == challengeId);
-            if ( index < 0) {
+            if ( index < 0 ) {
                 throw new Error('Something went wrong...');
             }
             user.challenges.splice(index, 1);
