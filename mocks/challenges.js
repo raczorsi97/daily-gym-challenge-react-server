@@ -18,7 +18,7 @@ const challenges = [
         , 'image': 'card_images/jumpingjacks.png'
     }
     , {
-        'id': 7
+        'id': 3
         , 'title': '30 minutes running'
         , 'creation_date': '2019.05.28'
         , 'category': 'cardio'
@@ -28,7 +28,7 @@ const challenges = [
         , 'image': 'card_images/run.jpg'
     }
     , {
-        'id': 3
+        'id': 4
         , 'title': 'Plank for 5 minutes'
         , 'creation_date': '2019.05.28'
         , 'category': 'strength'
@@ -38,7 +38,7 @@ const challenges = [
         , 'image': 'card_images/plank2.jpg'
     }
     , {
-        'id': 4
+        'id': 5
         , 'title': 'Burpee challenge'
         , 'category': 'cardio'
         , 'dificulty': 'hard' 
@@ -46,7 +46,7 @@ const challenges = [
         , 'image': 'card_images/burpees.png'
     }, 
     {
-        'id': 5
+        'id': 6
         , 'title': 'Plank for 60 seconds'
         , 'creation_date': '2019.05.28'
         , 'category': 'strength'
@@ -56,7 +56,7 @@ const challenges = [
         , 'image': 'card_images/plank.jpg'
     }
     , {
-        'id': 6
+        'id': 7
         , 'title': '500 squats challenge'
         , 'creation_date': '2019.05.12'
         , 'category': 'strength'

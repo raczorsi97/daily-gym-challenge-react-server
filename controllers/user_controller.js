@@ -55,10 +55,20 @@ router.get('/all/posts', function (request, response) {
 });
 
 router.get('/:userId/challenges', function (request, response) {
-    let userId = request.params.userId ;
+    let userId = request.params.userId;
     userService.getUsersChallenges(userId)
         .then((challenges) => {
             response.status(200).json(challenges);
+         }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+
+router.get('/:userId/challenges/unassigned', function (request, response) {
+    let userId = request.params.userId;
+    userService.getUnassignedChallengesToUser(userId)
+        .then((unassignedChallenges) => {
+            response.status(200).json(unassignedChallenges);
          }).catch((error) => {
             response.status(500).json(error);
         });

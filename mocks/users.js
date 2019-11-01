@@ -6,7 +6,7 @@ let users = [
         'password': 'test',
         'email': 'deby@gmail.com',
         'challenges': [{
-            'id': 3
+            'id': 5
             , 'title': 'Burpee challenge'
             , 'category': 'cardio'
             , 'dificulty': 'hard' 

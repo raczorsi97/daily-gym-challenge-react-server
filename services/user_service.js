@@ -107,6 +107,16 @@ async function getUsersChallenges(userId) {
     );
 }
 
+async function getUnassignedChallengesToUser(userId) {
+    return await userDAO.getUnassignedChallengesToUser(userId)
+        .then((unassignedChallenges) => {
+            return unassignedChallenges;
+        }).catch((error) => {
+            throw error.message;
+        }
+    );
+}
+
 async function hasUserChallenge(userId, challengeId) {
     return await userDAO.hasUserChallenge(userId, challengeId)
         .then((resp) => {
@@ -127,4 +137,5 @@ module.exports = {
     , getUsersChallenges
     , hasUserChallenge
     , removeUsersChallenge
+    , getUnassignedChallengesToUser
 }

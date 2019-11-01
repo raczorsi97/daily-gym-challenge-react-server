@@ -59,6 +59,24 @@ async function getUsersChallenges(userId) {
     return user.challenges;
 }
 
+async function getUnassignedChallengesToUser(userId) {
+    let user =  users.find((user) => {
+        if (user.id == userId) {
+            return user;
+        }
+        return false;
+    })
+    , userChallenges = user && user.challenges
+    , unassignedChallenges = challenges.filter((challenge) => {
+        let index = userChallenges.findIndex( uCh => uCh.id == challenge.id);
+        console.log('Das index :', index);
+        return ( index < 0);
+    });
+
+    console.log('Unassigned challenges :', unassignedChallenges);
+    return unassignedChallenges;
+}
+
 async function hasUserChallenge(userId, challengeId) {
     let user = users.find((user) => {
         if (user.id == userId) {
@@ -80,4 +98,5 @@ module.exports = {
     , getUsersChallenges
     , hasUserChallenge
     , removeUsersChallenge
+    , getUnassignedChallengesToUser
 }
