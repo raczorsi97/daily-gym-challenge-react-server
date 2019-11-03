@@ -1,3 +1,5 @@
+//challenge statuses: started - in progress - finished/abandoned
+
 let users = [
     {
         'id': 1,
@@ -12,6 +14,7 @@ let users = [
             , 'dificulty': 'hard' 
             , 'short_description': 'The burpee, or squat thrust[citation needed], is a full body exercise used in strength training and as an aerobic exercise. I bet you can`t do 50 by one rep.'
             , 'image': 'card_images/burpees.png'
+            // , 'status': 'in_progress'
         }]
     },
     {

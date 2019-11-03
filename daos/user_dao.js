@@ -27,6 +27,7 @@ async function addChallengeToUser(userId, challengeId) {
                 throw new Error('The user already has this challenge!');
             };
             let challenge = challenges.find(c => c.id == challengeId);
+            challenge.status = 'in_progress';
             user.challenges.push(challenge);
     
             return user;
