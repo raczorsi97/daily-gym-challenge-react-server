@@ -64,6 +64,26 @@ router.get('/:userId/challenges', function (request, response) {
         });
 });
 
+router.get('/:userId/challenges/completed', function (request, response) {
+    let userId = request.params.userId;
+    userService.getUsersCompletedChallenges(userId)
+        .then((challenges) => {
+            response.status(200).json(challenges);
+         }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+
+router.get('/:userId/challenges/abandoned', function (request, response) {
+    let userId = request.params.userId;
+    userService.getUsersAbandonedChallenges(userId)
+        .then((challenges) => {
+            response.status(200).json(challenges);
+         }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+
 router.get('/:userId/challenges/unassigned', function (request, response) {
     let userId = request.params.userId;
     userService.getUnassignedChallengesToUser(userId)
@@ -110,4 +130,16 @@ router.get('/:userId/challenge/:challengeId', function (request, response) {
         });
 });
 
+router.post('/:userId/challenge/:challengeId/complete', function (request, response) {
+    let userId = request.params.userId
+       , challengeId = request.params.challengeId
+    ;
+    userService.completeUsersChallenge(userId, challengeId)
+        .then((resp) => {
+            response.status(200).json(resp);
+        }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+ 
 module.exports = router;

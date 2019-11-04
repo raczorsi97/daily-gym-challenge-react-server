@@ -14,8 +14,10 @@ let users = [
             , 'dificulty': 'hard' 
             , 'short_description': 'The burpee, or squat thrust[citation needed], is a full body exercise used in strength training and as an aerobic exercise. I bet you can`t do 50 by one rep.'
             , 'image': 'card_images/burpees.png'
-            // , 'status': 'in_progress'
-        }]
+            , 'status': 'in_progress'
+        }],
+        'completed_challenges': [],
+        'abandoned_challenges': []
     },
     {
         'id': 2,
@@ -23,7 +25,9 @@ let users = [
         'username': 'bret',
         'email': 'Sincere@april.biz',
         'password': 'test',
-        'challenges': []
+        'challenges': [],
+        'completed_challenges': [],
+        'abandoned_challenges': []
       },
       {
         'id': 3,
@@ -31,7 +35,9 @@ let users = [
         'username': 'antonette',
         'email': 'Shanna@melissa.tv',
         'password': 'test',
-        'challenges': []
+        'challenges': [],
+        'completed_challenges': [],
+        'abandoned_challenges': []
       },
 ];
 

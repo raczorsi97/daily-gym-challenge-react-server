@@ -92,6 +92,15 @@ async function removeUsersChallenge(userId, challengeId) {
         .then((user) => {
             return user;
         }).catch((error) => {
+            throw error.message;
+        });
+}
+
+async function completeUsersChallenge(userId, challengeId) {
+    return await userDAO.completeUsersChallenge(userId, challengeId)
+        .then((user) => {
+            return user;
+        }).catch((error) => {
             console.log('Za error :', error.message);
             throw error.message;
         });
@@ -99,6 +108,26 @@ async function removeUsersChallenge(userId, challengeId) {
 
 async function getUsersChallenges(userId) {
     return await userDAO.getUsersChallenges(userId)
+        .then((challenges) => {
+            return challenges;
+        }).catch((error) => {
+            throw error.message;
+        }
+    );
+}
+
+async function getUsersCompletedChallenges(userId) {
+    return await userDAO.getUsersCompletedChallenges(userId)
+        .then((challenges) => {
+            return challenges;
+        }).catch((error) => {
+            throw error.message;
+        }
+    );
+}
+
+async function getUsersAbandonedChallenges(userId) {
+    return await userDAO.getUsersAbandonedChallenges(userId)
         .then((challenges) => {
             return challenges;
         }).catch((error) => {
@@ -137,5 +166,8 @@ module.exports = {
     , getUsersChallenges
     , hasUserChallenge
     , removeUsersChallenge
+    , completeUsersChallenge
     , getUnassignedChallengesToUser
+    , getUsersCompletedChallenges
+    , getUsersAbandonedChallenges
 }
