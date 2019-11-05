@@ -47,9 +47,8 @@ async function removeUsersChallenge(userId, challengeId) {
             if ( index < 0 ) {
                 throw new Error('Something went wrong...');
             }
-            let removedChallenge = user.challenges.splice(index, 1);
-            removedChallenge.status = 'abandoned';
-            user.abandoned_challenges.push(removedChallenge);
+            user.challenges[index].status = 'abandoned';
+            user.abandoned_challenges.push(user.challenges[index]);
             return user;
         }
         return false;
@@ -95,6 +94,22 @@ async function getUsersCompletedChallenges(userId) {
     return user.completed_challenges;
 }
 
+async function getUsersInProgressChallenges(userId) {
+    let challenges = [];
+    users.find((user) => {
+        if (user.id == userId) {
+            user.challenges.forEach( challenge => {
+                if (challenge.status === 'in_progress') {
+                    challenges.push(challenge);
+                }
+            })
+            return user;
+        }
+        return false;
+    });
+    return challenges;
+}
+
 async function getUsersAbandonedChallenges(userId) {
     let user = users.find((user) => {
         if (user.id == userId) {
@@ -121,16 +136,16 @@ async function getUnassignedChallengesToUser(userId) {
 }
 
 async function hasUserChallenge(userId, challengeId) {
-    let user = users.find((user) => {
+    let challengeToFind = false;
+    users.forEach((user) => {
         if (user.id == userId) {
-            let challenge = user.challenges.find((ch) => ch.id == challengeId); 
+            let challenge = user.challenges.find((ch) => ch.id == challengeId);
             if (challenge) {
-                return true;
+                challengeToFind = challenge;
             };
         }
-        return false;
     });
-    return !!user;
+    return challengeToFind;
 } 
  
 module.exports = {
@@ -144,5 +159,6 @@ module.exports = {
     , completeUsersChallenge
     , getUnassignedChallengesToUser
     , getUsersCompletedChallenges
+    , getUsersInProgressChallenges
     , getUsersAbandonedChallenges
 }

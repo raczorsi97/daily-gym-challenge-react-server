@@ -126,6 +126,16 @@ async function getUsersCompletedChallenges(userId) {
     );
 }
 
+async function getUsersInProgressChallenges(userId) {
+    return await userDAO.getUsersInProgressChallenges(userId)
+        .then((challenges) => {
+            return challenges;
+        }).catch((error) => {
+            throw error.message;
+        }
+    );
+}
+
 async function getUsersAbandonedChallenges(userId) {
     return await userDAO.getUsersAbandonedChallenges(userId)
         .then((challenges) => {
@@ -169,5 +179,6 @@ module.exports = {
     , completeUsersChallenge
     , getUnassignedChallengesToUser
     , getUsersCompletedChallenges
+    , getUsersInProgressChallenges
     , getUsersAbandonedChallenges
 }
