@@ -21,6 +21,10 @@ async function getAllUsers() {
     return users;
 }
 
+async function getUser(userId) {
+    return users.find((user) => { return user.id == userId });
+}
+
 async function addChallengeToUser(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
@@ -64,6 +68,23 @@ async function completeUsersChallenge(userId, challengeId) {
             }
             user.challenges[index].status = 'completed';
             user.completed_challenges.push(user.challenges[index]);
+            return user;
+        }
+        return false;
+    });
+}
+
+async function resetUsersChallenge(userId, challengeId) {
+    return users.find((user) => {
+        if (user.id == userId) {
+            let index = user.challenges.findIndex(ch => ch.id == challengeId);
+            if ( index < 0 ) {
+                throw new Error('Something went wrong...');
+            }
+            user.challenges.splice(index, 1);
+
+            index = user.abandoned_challenges.findIndex(ch => ch.id == challengeId);
+            user.abandoned_challenges.splice(index, 1);
             return user;
         }
         return false;
@@ -149,7 +170,8 @@ async function hasUserChallenge(userId, challengeId) {
 } 
  
 module.exports = {
-    findUser
+    getUser
+    , findUser
     , saveUser
     , getAllUsers
     , addChallengeToUser
@@ -161,4 +183,5 @@ module.exports = {
     , getUsersCompletedChallenges
     , getUsersInProgressChallenges
     , getUsersAbandonedChallenges
+    , resetUsersChallenge
 }

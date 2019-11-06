@@ -78,6 +78,14 @@ async function getAllUsers() {
     });
 }
 
+async function getUser(userId) {
+    return await userDAO.getUser(userId).then((user) => {
+        return user;
+    }).catch((error) => {
+        throw new Error(error.message);
+    });
+}
+
 async function addChallengeToUser(userId, challengeId) {
     return await userDAO.addChallengeToUser(userId, challengeId)
         .then((user) => {
@@ -98,6 +106,15 @@ async function removeUsersChallenge(userId, challengeId) {
 
 async function completeUsersChallenge(userId, challengeId) {
     return await userDAO.completeUsersChallenge(userId, challengeId)
+        .then((user) => {
+            return user;
+        }).catch((error) => {
+            throw error.message;
+        });
+}
+
+async function resetUsersChallenge(userId, challengeId) {
+    return await userDAO.resetUsersChallenge(userId, challengeId)
         .then((user) => {
             return user;
         }).catch((error) => {
@@ -169,6 +186,7 @@ async function hasUserChallenge(userId, challengeId) {
 module.exports = {
     login
     , register
+    , getUser
     , isValidLogin
     , isValidRegister
     , getAllUsers
@@ -177,6 +195,7 @@ module.exports = {
     , hasUserChallenge
     , removeUsersChallenge
     , completeUsersChallenge
+    , resetUsersChallenge
     , getUnassignedChallengesToUser
     , getUsersCompletedChallenges
     , getUsersInProgressChallenges
