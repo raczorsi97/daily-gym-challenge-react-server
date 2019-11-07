@@ -56,6 +56,28 @@ router.get('/:userId', function (request, response) {
         });
 });
 
+router.put('/:userId', function (request, response) {
+    let userId = request.params.userId
+        , data = request.body.data
+    ;
+    userService.updateUser(userId, data)
+        .then((user) => {
+            response.status(200).json(user);
+         }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+
+router.get('/:userId/challenges/all', function (request, response) {
+    let userId = request.params.userId;
+    userService.getAllChallengesWithStatus(userId)
+        .then((challenges) => {
+            response.status(200).json(challenges);
+         }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+
 router.get('/:userId/challenges', function (request, response) {
     let userId = request.params.userId;
     userService.getUsersChallenges(userId)

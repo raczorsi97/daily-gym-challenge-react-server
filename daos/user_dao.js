@@ -25,6 +25,20 @@ async function getUser(userId) {
     return users.find((user) => { return user.id == userId });
 }
 
+async function updateUser(userId, data) {
+    return users.find((user) => {
+        if (user.id == userId) {
+            data.name && (user.name = data.name);
+            data.username && (user.username = data.username);
+            data.image && (user.image = data.image);
+            data.email && (user.email = data.email);
+            data.description && (user.description = data.description);
+            return user;
+        }
+        return false;
+    });
+}
+
 async function addChallengeToUser(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
@@ -151,7 +165,7 @@ async function getUnassignedChallengesToUser(userId) {
     , userChallenges = user && user.challenges
     , unassignedChallenges = challenges.filter((challenge) => {
         let index = userChallenges.findIndex( uCh => uCh.id == challenge.id);
-        return ( index < 0);
+        return (index < 0);
     });
     return unassignedChallenges;
 }
@@ -167,12 +181,29 @@ async function hasUserChallenge(userId, challengeId) {
         }
     });
     return challengeToFind;
-} 
+}
+
+async function getAllChallengesWithStatus(userId) {
+    let allChallenges = []
+        , user = users.find(u => u.id == userId)
+    ;
+    challenges.forEach((challenge) => {
+        var usersChallenge = user.challenges.find( c => c.id == challenge.id);
+        if ( usersChallenge ) {
+            allChallenges.push({ name: usersChallenge.title, status: usersChallenge.status });
+        } else {
+            allChallenges.push({ name: challenge.title, status: 'ready_to_start' });
+        }
+
+    });
+    return allChallenges; 
+}
  
 module.exports = {
     getUser
     , findUser
     , saveUser
+    , updateUser
     , getAllUsers
     , addChallengeToUser
     , getUsersChallenges
@@ -184,4 +215,5 @@ module.exports = {
     , getUsersInProgressChallenges
     , getUsersAbandonedChallenges
     , resetUsersChallenge
+    , getAllChallengesWithStatus
 }
