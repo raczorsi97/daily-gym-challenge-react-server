@@ -21,6 +21,10 @@ async function getAllUsers() {
     return users;
 }
 
+async function getAllUsersModified(userId) {
+    return users.filter(u => u.id !== userId);
+}
+
 async function getUser(userId) {
     return users.find((user) => { return user.id == userId });
 }
@@ -216,4 +220,5 @@ module.exports = {
     , getUsersAbandonedChallenges
     , resetUsersChallenge
     , getAllChallengesWithStatus
+    , getAllUsersModified
 }

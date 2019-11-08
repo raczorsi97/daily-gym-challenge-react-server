@@ -46,6 +46,15 @@ router.get('/all', function (request, response) {
     });
 });
 
+router.get('/:userId/all', function (request, response) {
+    let userId = request.params.userId;
+    userService.getAllUsersModified(userId).then((users) => {
+        response.status(200).json(users);
+    }).catch((error) => {
+        response.status(500).json({ 'error': error.message });
+    });
+});
+
 router.get('/:userId', function (request, response) {
     let userId = request.params.userId;
     userService.getUser(userId)

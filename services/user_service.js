@@ -78,6 +78,14 @@ async function getAllUsers() {
     });
 }
 
+async function getAllUsersModified(userId) {
+    return await userDAO.getAllUsersModified(userId).then((users) => {
+        return users;
+    }).catch((error) => {
+        throw new Error(error.message);
+    });
+}
+
 async function getUser(userId) {
     return await userDAO.getUser(userId).then((user) => {
         return user;
@@ -219,4 +227,5 @@ module.exports = {
     , getUsersInProgressChallenges
     , getUsersAbandonedChallenges
     , getAllChallengesWithStatus
+    , getAllUsersModified
 }
