@@ -4,9 +4,10 @@ let users = [
     {
         'id': 1,
         'name': 'Deborah de Luca',
-        'username': 'test',
+        'username': 'deborah',
         'password': 'test',
-        'email': 'deby@gmail.com',
+        'email': 'deborahl@gmail.com',
+        'image': 'profile_pictures/deborah.png',
         'challenges': [{
             'id': 2
             , 'title': 'Jumping jack challenge'
@@ -41,20 +42,33 @@ let users = [
     },
     {
         'id': 2,
-        'name': 'Leanne Graham',
-        'username': 'bret',
-        'email': 'Sincere@april.biz',
+        'name': 'Boris Brejcha',
+        'username': 'boris_b16',
+        'email': 'boris_brejcha@yahoo.com',
         'password': 'test',
+        'image': 'profile_pictures/boris.png',
         'challenges': [],
         'completed_challenges': [],
         'abandoned_challenges': []
       },
       {
         'id': 3,
-        'name': 'Ervin Howell',
-        'username': 'antonette',
-        'email': 'Shanna@melissa.tv',
+        'name': 'Nina Kraviz',
+        'username': 'kr_nina',
+        'email': 'ninakr@gmail.com',
         'password': 'test',
+        'image': 'profile_pictures/nina.png',
+        'challenges': [],
+        'completed_challenges': [],
+        'abandoned_challenges': []
+      },
+      {
+        'id': 4,
+        'name': 'Solomun',
+        'username': 'solomun1220',
+        'email': 'mladen_solomun@gmail.com',
+        'password': 'test',
+        'image': 'profile_pictures/solomun.png',
         'challenges': [],
         'completed_challenges': [],
         'abandoned_challenges': []
