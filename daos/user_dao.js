@@ -22,7 +22,7 @@ async function getAllUsers() {
 }
 
 async function getAllUsersModified(userId) {
-    return users.filter(u => u.id !== userId);
+    return users.filter(u => u.id != userId);
 }
 
 async function getUser(userId) {
@@ -46,16 +46,18 @@ async function updateUser(userId, data) {
 async function addChallengeToUser(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            let ch = user.challenges.find(c => c.id == challengeId);
+            console.log('Prev challenges :', user.challenges);
+            let ch = user.challenges.find(c => {
+                return c == challengeId });
             if (ch) {
                 throw new Error('The user already has this challenge!');
             };
             
             let challenge = challenges.find(c => c.id == challengeId);
-            challenge.status = 'in_progress';
-            challenge.users.push(userId);
+            challenge.in_progress.push(userId);
 
-            user.challenges.push(challenge);
+            user.challenges.push(challengeId);
+            console.log('New challenges :', user.challenges);
             return user;
         }
         return false;
@@ -65,12 +67,22 @@ async function addChallengeToUser(userId, challengeId) {
 async function removeUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            let index = user.challenges.findIndex(ch => ch.id == challengeId);
+            let index = user.challenges.findIndex(ch => ch == challengeId);
+
             if ( index < 0 ) {
                 throw new Error('Something went wrong...');
             }
-            user.challenges[index].status = 'abandoned';
-            user.abandoned_challenges.push(user.challenges[index]);
+            user.abandoned_challenges.push(challengeId);
+
+            let challenge = challenges.find(ch => ch.id == challengeId)
+                , userIndex = challenge.in_progress.findIndex( id => id == userId );
+
+            if ( userIndex < 0 ) {
+                throw new Error('Something went wrong...');
+            }
+
+            challenge.abandoned.push(userId);
+            challenge.in_progress.splice(userIndex, 1);
             return user;
         }
         return false;
@@ -80,12 +92,22 @@ async function removeUsersChallenge(userId, challengeId) {
 async function completeUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            let index = user.challenges.findIndex(ch => ch.id == challengeId);
+            let index = user.challenges.findIndex(ch => ch == challengeId);
             if ( index < 0 ) {
                 throw new Error('Something went wrong...');
             }
-            user.challenges[index].status = 'completed';
-            user.completed_challenges.push(user.challenges[index]);
+            user.completed_challenges.push(challengeId);
+
+            let challenge = challenges.find(ch => ch.id == challengeId)
+                , userIndex = challenge.in_progress.findIndex( id => id == userId );
+
+            if ( userIndex < 0 ) {
+                throw new Error('Something went wrong...');
+            }
+
+            challenge.completed.push(userId);
+            challenge.in_progress.splice(userIndex, 1);
+
             return user;
         }
         return false;
@@ -103,6 +125,15 @@ async function resetUsersChallenge(userId, challengeId) {
 
             index = user.abandoned_challenges.findIndex(ch => ch.id == challengeId);
             user.abandoned_challenges.splice(index, 1);
+
+            let challenge = challenges.find(ch => ch.id == challengeId)
+                , userIndex = challenge.abandoned.findIndex( id => id == userId );
+
+            if ( userIndex < 0 ) {
+                throw new Error('Something went wrong...');
+            }
+            challenge.abandoned.splice(userIndex, 1);
+
             return user;
         }
         return false;
@@ -118,8 +149,8 @@ async function getUsersChallenges(userId) {
     });
     return {
         challenges: user.challenges
-        , completed_challenges: user.completed_challenges
-        , abandoned_challenges: user.abandoned_challenges
+        , completed_challenges: user.completed_challenges //TODO!
+        , abandoned_challenges: user.abandoned_challenges //TODO!
     };
 }
 
@@ -134,13 +165,17 @@ async function getUsersCompletedChallenges(userId) {
 }
 
 async function getUsersInProgressChallenges(userId) {
-    let challenges = [];
+    let inProgressChallenges = [];
     users.find((user) => {
         if (user.id == userId) {
-            user.challenges.forEach( challenge => {
-                if (challenge.status === 'in_progress') {
-                    challenges.push(challenge);
-                }
+            user.challenges.forEach( cId => {
+                users.abandoned_challenges.forEach( aId => {
+                    if ( aId == cId ) {
+                        //this challenge is abandoned
+                    } else {
+                        inProgressChallenges.push(cId);
+                    }
+                })
             })
             return user;
         }
@@ -178,10 +213,17 @@ async function hasUserChallenge(userId, challengeId) {
     let challengeToFind = false;
     users.forEach((user) => {
         if (user.id == userId) {
-            let challenge = user.challenges.find((ch) => ch.id == challengeId);
-            if (challenge) {
-                challengeToFind = challenge;
-            };
+            if (user.challenges.includes(challengeId)) {
+                challengeToFind = challenges.find(ch => ch.id == challengeId);
+
+                if ( user.completed_challenges.includes(challengeId)) {
+                    challengeToFind.status = 'completed';
+                }
+
+                if ( user.abandoned_challenges.includes(challengeId)) {
+                    challengeToFind.status = 'abandoned';
+                }
+            }
         }
     });
     return challengeToFind;
@@ -202,6 +244,24 @@ async function getAllChallengesWithStatus(userId) {
     });
     return allChallenges; 
 }
+
+async function getUsersChallengeCounts(userId) {
+    let user = users.find(u => u.id == userId);
+    return {
+        completed: user.completed_challenges.length
+        , abandoned: user.abandoned_challenges.length
+        , inProgress: user.challenges.filter( c => c.status === 'in_progress').length
+    };
+}
+
+async function getTopList() {
+    var usersAndCompletedChallenges = users.map( user => {
+        return { user, count: user.completed_challenges.length }
+    });
+    return usersAndCompletedChallenges.sort((a, b) => {
+        return b.count - a.count;
+    });
+}
  
 module.exports = {
     getUser
@@ -221,4 +281,6 @@ module.exports = {
     , resetUsersChallenge
     , getAllChallengesWithStatus
     , getAllUsersModified
+    , getUsersChallengeCounts
+    , getTopList
 }

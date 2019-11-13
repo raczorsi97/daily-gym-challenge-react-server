@@ -19,7 +19,37 @@ async function getChallengeById(id) {
         });
 }
 
+async function getChallengePercentage(id) {
+    return await challengeDAO.getChallengePercentage(id)
+        .then((percentage) => {
+            return percentage;
+        }).catch((error) => {
+            throw new Error(error.message);
+        });
+}
+
+async function getChallengeRating(id) {
+    return await challengeDAO.getChallengeRating(id)
+        .then((percentage) => {
+            return percentage;
+        }).catch((error) => {
+            throw new Error(error.message);
+        });
+}
+
+async function rateChallenge(challengeId, rating) {
+    return await challengeDAO.rateChallenge(challengeId, rating)
+        .then((challenge) => {
+            return challenge;
+        }).catch((error) => {
+            throw new Error(error.message);
+        });
+}
+
 module.exports = {
     getAllChallenges
     , getChallengeById
+    , getChallengePercentage
+    , getChallengeRating
+    , rateChallenge
 }

@@ -46,6 +46,15 @@ router.get('/all', function (request, response) {
     });
 });
 
+router.get('/top', function (request, response) {
+    userService.getTopList()
+        .then((topList) => {
+            response.status(200).json(topList);
+         }).catch((error) => {
+            response.status(500).json({ 'error': error.message });
+        });
+});
+
 router.get('/:userId/all', function (request, response) {
     let userId = request.params.userId;
     userService.getAllUsersModified(userId).then((users) => {
@@ -90,6 +99,16 @@ router.get('/:userId/challenges/all', function (request, response) {
 router.get('/:userId/challenges', function (request, response) {
     let userId = request.params.userId;
     userService.getUsersChallenges(userId)
+        .then((challenges) => {
+            response.status(200).json(challenges);
+         }).catch((error) => {
+            response.status(500).json(error);
+        });
+});
+
+router.get('/:userId/challenges/count', function (request, response) {
+    let userId = request.params.userId;
+    userService.getUsersChallengeCounts(userId)
         .then((challenges) => {
             response.status(200).json(challenges);
          }).catch((error) => {

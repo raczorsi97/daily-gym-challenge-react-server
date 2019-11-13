@@ -208,6 +208,24 @@ async function getAllChallengesWithStatus(userId) {
         });
 }
 
+async function getUsersChallengeCounts(userId) {
+    return await userDAO.getUsersChallengeCounts(userId)
+        .then((resp) => {
+            return resp;
+        }).catch((error) => {
+            throw error.message;
+        });
+}
+
+async function getTopList() {
+    return await userDAO.getTopList()
+        .then((topList) => {
+            return topList;
+        }).catch((error) => {
+            throw new Error(error.message);
+        });
+}
+
 module.exports = {
     login
     , register
@@ -228,4 +246,6 @@ module.exports = {
     , getUsersAbandonedChallenges
     , getAllChallengesWithStatus
     , getAllUsersModified
+    , getUsersChallengeCounts
+    , getTopList
 }
