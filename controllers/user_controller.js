@@ -116,36 +116,6 @@ router.get('/:userId/challenges/count', function (request, response) {
         });
 });
 
-router.get('/:userId/challenges/completed', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUsersCompletedChallenges(userId)
-        .then((challenges) => {
-            response.status(200).json(challenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
-
-router.get('/:userId/challenges/inprogress', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUsersInProgressChallenges(userId)
-        .then((challenges) => {
-            response.status(200).json(challenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
-
-router.get('/:userId/challenges/abandoned', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUsersAbandonedChallenges(userId)
-        .then((challenges) => {
-            response.status(200).json(challenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
-
 router.get('/:userId/challenges/unassigned', function (request, response) {
     let userId = request.params.userId;
     userService.getUnassignedChallengesToUser(userId)

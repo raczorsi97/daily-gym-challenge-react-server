@@ -134,7 +134,6 @@ async function resetUsersChallenge(userId, challengeId) {
         .then((user) => {
             return user;
         }).catch((error) => {
-            console.log('Za error :', error.message);
             throw error.message;
         });
 }
@@ -149,35 +148,7 @@ async function getUsersChallenges(userId) {
     );
 }
 
-async function getUsersCompletedChallenges(userId) {
-    return await userDAO.getUsersCompletedChallenges(userId)
-        .then((challenges) => {
-            return challenges;
-        }).catch((error) => {
-            throw error.message;
-        }
-    );
-}
 
-async function getUsersInProgressChallenges(userId) {
-    return await userDAO.getUsersInProgressChallenges(userId)
-        .then((challenges) => {
-            return challenges;
-        }).catch((error) => {
-            throw error.message;
-        }
-    );
-}
-
-async function getUsersAbandonedChallenges(userId) {
-    return await userDAO.getUsersAbandonedChallenges(userId)
-        .then((challenges) => {
-            return challenges;
-        }).catch((error) => {
-            throw error.message;
-        }
-    );
-}
 
 async function getUnassignedChallengesToUser(userId) {
     return await userDAO.getUnassignedChallengesToUser(userId)
@@ -241,9 +212,6 @@ module.exports = {
     , completeUsersChallenge
     , resetUsersChallenge
     , getUnassignedChallengesToUser
-    , getUsersCompletedChallenges
-    , getUsersInProgressChallenges
-    , getUsersAbandonedChallenges
     , getAllChallengesWithStatus
     , getAllUsersModified
     , getUsersChallengeCounts

@@ -46,7 +46,6 @@ async function updateUser(userId, data) {
 async function addChallengeToUser(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            console.log('Prev challenges :', user.challenges);
             let ch = user.challenges.find(c => {
                 return c == challengeId });
             if (ch) {
@@ -57,7 +56,6 @@ async function addChallengeToUser(userId, challengeId) {
             challenge.in_progress.push(userId);
 
             user.challenges.push(challengeId);
-            console.log('New challenges :', user.challenges);
             return user;
         }
         return false;
@@ -117,15 +115,16 @@ async function completeUsersChallenge(userId, challengeId) {
 async function resetUsersChallenge(userId, challengeId) {
     return users.find((user) => {
         if (user.id == userId) {
-            let index = user.challenges.findIndex(ch => ch.id == challengeId);
+    
+            let index = user.challenges.findIndex(ch => ch == challengeId);
             if ( index < 0 ) {
                 throw new Error('Something went wrong...');
             }
             user.challenges.splice(index, 1);
-
-            index = user.abandoned_challenges.findIndex(ch => ch.id == challengeId);
+    
+            index = user.abandoned_challenges.findIndex(ch => ch == challengeId);
             user.abandoned_challenges.splice(index, 1);
-
+    
             let challenge = challenges.find(ch => ch.id == challengeId)
                 , userIndex = challenge.abandoned.findIndex( id => id == userId );
 
@@ -140,58 +139,57 @@ async function resetUsersChallenge(userId, challengeId) {
     });
 }
 
-async function getUsersChallenges(userId) {
-    let user = users.find((user) => {
+function getUsersChallengesSync(userId) {
+    let user
+        , allChallenges = []
+        , completedChallenges = []
+        , abandonedChallenges = []
+        , inProgressChallenges = []
+    ;
+    user = users.find((user) => {
         if (user.id == userId) {
             return user;
         }
         return false;
     });
+    challenges.forEach( ch => {
+        user.completed_challenges.forEach( uCh => {
+            if (ch.id == uCh) {
+                ch.status = 'completed';
+                completedChallenges.push(ch);
+            }
+        });
+    });
+    challenges.forEach( ch => {
+        user.abandoned_challenges.forEach( uCh => {
+            if (ch.id == uCh) {
+                ch.status = 'abandoned';
+                abandonedChallenges.push(ch);
+            }
+        });
+    });
+    challenges.forEach( ch => {
+        user.challenges.forEach( uCh => {
+            if (ch.id == uCh) {
+                if (!ch.status || ch.status == 'in_progress') {
+                    ch.status = 'in_progress';
+                    inProgressChallenges.push(ch);
+                }
+                allChallenges.push(ch);
+            }
+        });
+    });
+
     return {
-        challenges: user.challenges
-        , completed_challenges: user.completed_challenges //TODO!
-        , abandoned_challenges: user.abandoned_challenges //TODO!
+        challenges: allChallenges
+        , completedChallenges: completedChallenges
+        , abandonedChallenges: abandonedChallenges
+        , inProgressChallenges: inProgressChallenges
     };
 }
 
-async function getUsersCompletedChallenges(userId) {
-    let user = users.find((user) => {
-        if (user.id == userId) {
-            return user;
-        }
-        return false;
-    });
-    return user.completed_challenges;
-}
-
-async function getUsersInProgressChallenges(userId) {
-    let inProgressChallenges = [];
-    users.find((user) => {
-        if (user.id == userId) {
-            user.challenges.forEach( cId => {
-                users.abandoned_challenges.forEach( aId => {
-                    if ( aId == cId ) {
-                        //this challenge is abandoned
-                    } else {
-                        inProgressChallenges.push(cId);
-                    }
-                })
-            })
-            return user;
-        }
-        return false;
-    });
-    return challenges;
-}
-
-async function getUsersAbandonedChallenges(userId) {
-    let user = users.find((user) => {
-        if (user.id == userId) {
-            return user;
-        }
-        return false;
-    });
-    return user.abandoned_challenges;
+async function getUsersChallenges(userId) {
+    return getUsersChallengesSync(userId);
 }
 
 async function getUnassignedChallengesToUser(userId) {
@@ -203,7 +201,7 @@ async function getUnassignedChallengesToUser(userId) {
     })
     , userChallenges = user && user.challenges
     , unassignedChallenges = challenges.filter((challenge) => {
-        let index = userChallenges.findIndex( uCh => uCh.id == challenge.id);
+        let index = userChallenges.findIndex( uCh => uCh == challenge.id);
         return (index < 0);
     });
     return unassignedChallenges;
@@ -218,10 +216,10 @@ async function hasUserChallenge(userId, challengeId) {
 
                 if ( user.completed_challenges.includes(challengeId)) {
                     challengeToFind.status = 'completed';
-                }
-
-                if ( user.abandoned_challenges.includes(challengeId)) {
+                } else if ( user.abandoned_challenges.includes(challengeId)) {
                     challengeToFind.status = 'abandoned';
+                } else {
+                    challengeToFind.status = 'in_progress';
                 }
             }
         }
@@ -230,27 +228,34 @@ async function hasUserChallenge(userId, challengeId) {
 }
 
 async function getAllChallengesWithStatus(userId) {
-    let allChallenges = []
-        , user = users.find(u => u.id == userId)
-    ;
+    let allChallenges = [];
     challenges.forEach((challenge) => {
-        var usersChallenge = user.challenges.find( c => c.id == challenge.id);
-        if ( usersChallenge ) {
-            allChallenges.push({ name: usersChallenge.title, status: usersChallenge.status });
+        let index = challenge.completed.findIndex(uId => uId == userId);
+        if ( index > -1 ) {
+            allChallenges.push({ name: challenge.title, status: 'completed' });
         } else {
-            allChallenges.push({ name: challenge.title, status: 'ready_to_start' });
+            index = challenge.abandoned.findIndex(uId => uId == userId);
+            if ( index > -1 ) {
+                allChallenges.push({ name: challenge.title, status: 'abandoned' });
+            } else {
+                index = challenge.in_progress.findIndex( uId => uId == userId);
+                if ( index > -1 ) {
+                    allChallenges.push({ name: challenge.title, status: 'in_progress' });
+                } else {
+                    allChallenges.push({ name: challenge.title, status: 'ready_to_start' });
+                }
+            }
         }
-
     });
     return allChallenges; 
 }
 
 async function getUsersChallengeCounts(userId) {
-    let user = users.find(u => u.id == userId);
+    let allChallenges = getUsersChallengesSync(userId);
     return {
-        completed: user.completed_challenges.length
-        , abandoned: user.abandoned_challenges.length
-        , inProgress: user.challenges.filter( c => c.status === 'in_progress').length
+        completed: allChallenges.completedChallenges.length
+        , abandoned: allChallenges.abandonedChallenges.length
+        , inProgress: allChallenges.inProgressChallenges.length
     };
 }
 
@@ -275,9 +280,6 @@ module.exports = {
     , removeUsersChallenge
     , completeUsersChallenge
     , getUnassignedChallengesToUser
-    , getUsersCompletedChallenges
-    , getUsersInProgressChallenges
-    , getUsersAbandonedChallenges
     , resetUsersChallenge
     , getAllChallengesWithStatus
     , getAllUsersModified
