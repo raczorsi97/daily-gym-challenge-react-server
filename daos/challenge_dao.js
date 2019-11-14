@@ -26,7 +26,7 @@ async function getChallengePercentage(challengeId) {
         , notAssignedPercentage = 100 - (inProgressPercentage + completedPercentage + abandonedPercentage)
     ;
 
-    return { inProgressPercentage, completedPercentage, abandonedPercentage, notAssignedPercentage };
+    return { rating: challenge.rating, inProgressPercentage, completedPercentage, abandonedPercentage, notAssignedPercentage };
 }
 
 async function getChallengeRating(challengeId) {
@@ -38,7 +38,7 @@ async function rateChallenge(challengeId, rating) {
     challenge.ratings.push(parseInt(rating));
 
     let sum  = challenge.ratings.reduce((a, b) => a + b, 0)
-    challenge.rating = sum/challenge.ratings.length;
+    challenge.rating = (sum/challenge.ratings.length).toFixed(2);
     return challenge;
 }
 

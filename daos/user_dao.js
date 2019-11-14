@@ -2,6 +2,8 @@ const users = require('../mocks/users')
     challenges = require('../mocks/challenges')
 ;
 
+const UserModel = require('../schemas/userSchema');
+
 async function findUser(username, password) {
     return users.find((user) => {
         return (user.username === username);
@@ -22,7 +24,16 @@ async function getAllUsers() {
 }
 
 async function getAllUsersModified(userId) {
-    return users.filter(u => u.id != userId);
+    // return users.filter(u => u.id != userId);
+    console.log(UserModel);
+    UserModel.find()
+        .exec((err, users) => {
+            if (err) {
+                console.log('Whoops error :', err);
+            }
+            console.log(users);
+            return users;
+        });
 }
 
 async function getUser(userId) {
