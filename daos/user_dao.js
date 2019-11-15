@@ -5,22 +5,31 @@ const users = require('../mocks/users')
 const UserModel = require('../schemas/userSchema');
 
 async function findUser(username, password) {
-    return users.find((user) => {
-        return (user.username === username);
-    })
+    return UserModel.find({ username: username } , function (err, users) {
+        if (err) {
+            return handleError(err);
+        }
+        return users;
+    });
 }
 
 async function saveUser(user) {
-    user.id =  users[users.length - 1].id + 1;
-    user.challenges = [];
-    user.abandoned_challenges = [];
-    user.completed_challenges = [];
-    users.push(user)
-    return user;
+    return UserModel.create(user , function (err, user) {
+        if (err) {
+            return handleError(err);
+        }
+        console.log('User 1 :', user);
+        return user;
+    });
 }
 
-async function getAllUsers() {
-    return users;
+function getAllUsers() {
+    return UserModel.find({} , function (err, users) {
+        if (err) {
+           console.log('Error....');
+        }
+        return users;
+    });
 }
 
 async function getAllUsersModified(userId) {

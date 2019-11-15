@@ -2,6 +2,9 @@ const lodash = require('lodash');
 const jwtService = require('../services/jwt_service');
 const userDAO = require('../daos/user_dao');
 
+const UserModel = require('../schemas/userSchema')
+    , ChallenngeModel = require('../schemas/challengeSchema');
+
 function isValidLogin(data) {
     return (isDataExists(data.username) && isDataExists(data.password));
 }
@@ -19,86 +22,113 @@ function isDataExists(field) {
     return (!lodash.isUndefined(field) && !lodash.isEmpty(field.trim()));
 }
 
-function createError(field, message) {
-    let error = new Error(message);
-    error.field = field;
-    return error;
+
+login = function(req, res) {
+    let data = req.body;
+    UserModel.findOne({ username: data.username, password: data.password } , function (err, user) {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+        if (!user) {
+            return res.status(500).send('User not found');
+        }
+        let token = jwtService.generateUserToken(user);
+        return res.json({ token, user });
+    });
 }
 
-
-async function login(data) {
-    return await userDAO.findUser(data.username)
-        .then((user) => {
-            if (user == null) {
-                throw createError('username', 'Invalid username');
-            }
-            if (user.password !== data.password) {
-                throw createError('password', 'Invalid credentials');
+register = function(req, res) {
+    let data = req.body;
+    if (isValidRegister(data)) {
+        UserModel.create(data, function (err, user) {
+            if (err) {
+                return res.status(500).send(err.errmsg);
             }
             let token = jwtService.generateUserToken(user);
-            return { user, token };
-        })
-        .catch((error) => {
-            throw error;
+            return res.json({ token, user });
         });
+    } else {
+        return res.status(500).send({ error: 'missing fields' });
+    }
 }
 
-async function register(data) {
-    return await userDAO.getAllUsers()
-        .then((users) => {
-            let emailFormat = new RegExp('^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$');
-            users.find((user) => {
-                if (!emailFormat.test(data.email)) {
-    
-                    throw createError('email', 'Please provide a valid email.');
-                }
-                if (user.username === data.username) {
-                    throw createError('username', 'This username is already taken.');
-                }
-                if (user.email === data.email) {
-                    throw createError('email', 'This email is already registered.');
-                }
-            });
-        })
-        .then(() => {
-            return userDAO.saveUser(data).then((user) => {
-                let token = jwtService.generateUserToken(user);
-                return { token, user };
-            }).catch((error) => {
-                throw new Error(error.message);
-            });
+getAllUsers = function(req, res) {
+    UserModel.find({} , function (err, allusers) {
+        if (err) {
+           return res.status(500).send(err);
+        }
+        return res.json(allusers);
+    });
+}
+
+getAllUsersModified = function(req, res) {
+    UserModel.find({ _id: { $ne: req.params.userId } } , function (err, allusers) {
+        if (err) {
+           return res.status(500).send(err);
+        }
+        return res.json(allusers);
+    });
+}
+
+getUser = function(req, res) { 
+    UserModel.findOne({ _id: req.params.userId } , function (err, user) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        return res.json(user);
+    });
+}
+
+getTopList = function(req, res) {
+    let mappedUsers = []
+        , sortedUsers = []
+    ;
+    UserModel.find({}, function(err, users) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        mappedUsers = users.map( u => { 
+            return { user: u, count: u.completed_challenges.length };
         });
-}
-
-async function getAllUsers() {
-    return await userDAO.getAllUsers().then((users) => {
-        return users;
-    }).catch((error) => {
-        throw new Error(error.message);
+        sortedUsers = mappedUsers.sort((a, b) => {
+            return b.count - a.count;
+        });
+        res.json(sortedUsers);
     });
 }
 
-async function getAllUsersModified(userId) {
-    return await userDAO.getAllUsersModified(userId).then((users) => {
-        return users;
-    }).catch((error) => {
-        throw new Error(error.message);
+updateUser = function(req, res) {
+    let userId = req.params.userId
+        , data = req.body.data
+    ;
+    UserModel.updateOne({ _id: userId}, { $set: data }, function(err, user) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        UserModel.findOne({ _id: userId}, function(err, user) {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            return res.json(user);
+        });
     });
 }
 
-async function getUser(userId) {
-    return await userDAO.getUser(userId).then((user) => {
-        return user;
-    }).catch((error) => {
-        throw new Error(error.message);
-    });
-}
-
-async function updateUser(userId, data) {
-    return await userDAO.updateUser(userId, data).then((user) => {
-        return user;
-    }).catch((error) => {
-        throw new Error(error.message);
+addChallengeToUser = function(req, res) {
+    let userId = req.params.userId
+        , challengeId = req.params.challengeId
+    ;
+    UserModel.findOneAndUpdate({ _id: userId}, { $push: { challenges: challengeId }}, function(err, resp) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        UserModel.findOne({ _id: userId}, function(err, user) {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            console.log('Challenge added :', user);
+            return res.json(user);
+        });
     });
 }
 
@@ -148,8 +178,6 @@ async function getUsersChallenges(userId) {
     );
 }
 
-
-
 async function getUnassignedChallengesToUser(userId) {
     return await userDAO.getUnassignedChallengesToUser(userId)
         .then((unassignedChallenges) => {
@@ -160,14 +188,27 @@ async function getUnassignedChallengesToUser(userId) {
     );
 }
 
-async function hasUserChallenge(userId, challengeId) {
-    return await userDAO.hasUserChallenge(userId, challengeId)
-        .then((resp) => {
-            return resp;
-        }).catch((error) => {
-            throw error.message;
+hasUserChallenge = function(req, res) {
+    let userId = req.params.userId
+        , challengeId = req.params.challengeId
+    ;
+    UserModel.find({ _id: userId, challenges: { $in: challengeId }}, function(err, user) {
+        if (err) {
+            return res.status(500).send(err);
         }
-    );
+        if (!user) {
+            return res.json(false);
+        } else {
+            return res.json(user);
+        }
+    })
+    // return await userDAO.hasUserChallenge(userId, challengeId)
+    //     .then((resp) => {
+    //         return resp;
+    //     }).catch((error) => {
+    //         throw error.message;
+    //     }
+    // );
 }
 
 async function getAllChallengesWithStatus(userId) {
@@ -185,15 +226,6 @@ async function getUsersChallengeCounts(userId) {
             return resp;
         }).catch((error) => {
             throw error.message;
-        });
-}
-
-async function getTopList() {
-    return await userDAO.getTopList()
-        .then((topList) => {
-            return topList;
-        }).catch((error) => {
-            throw new Error(error.message);
         });
 }
 

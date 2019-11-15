@@ -1,13 +1,14 @@
-const challengeDAO = require('../daos/challenge_dao');
+// const challengeDAO = require('../daos/challenge_dao');
 
-async function getAllChallenges() {
-    return await challengeDAO.getAllChallenges()
-        .then((challenges) => {
-            if (!challenges.length) {
-                throw new Error('There are no challenges :(');
-            }
-            return challenges;
-        });
+const ChallengeModel = require('../schemas/challengeSchema');
+
+getAllChallenges = function(req, res) {
+    ChallengeModel.find({}, function(err, challenges) {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+        return res.json(challenges);
+    });
 }
 
 async function getChallengeById(id) {

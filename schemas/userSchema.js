@@ -3,14 +3,14 @@ var mongoose = require('mongoose')
 ;
 
 var Users = new Schema({
-    name: String,
-    username: String,
-    password: String,
-    email: String,
-    image: String,
-    challenges: Array,
-    completed_challenges: Array,
-    abandoned_challenges: Array
+    name: { type : String , required : true }
+    , username: { type : String , unique : true, required : true }
+    , password: { type : String , unique : true, required : true }
+    , email: { type : String , unique : true, required : true }
+    , image: String
+    , challenges: Array
+    , completed_challenges: Array
+    , abandoned_challenges: Array
 });
 
 module.exports = mongoose.model('UserModel', Users, 'Users');

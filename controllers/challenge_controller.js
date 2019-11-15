@@ -3,14 +3,8 @@ var router = express.Router();
 
 const challengeService = require('../services/challenge_service');
 
-router.get('/all', function (request, response) {
-    challengeService.getAllChallenges()
-        .then((challenges) => {
-            response.status(200).json({ 'challenges': challenges });
-         }).catch((error) => {
-            response.status(500).json({ 'error': error.message });
-        });
-});
+router.route('/all')
+    .get(challengeService.getAllChallenges);
 
 router.get('/:id/percentage', function (request, response) {
     challengeService.getChallengePercentage(request.params.id)

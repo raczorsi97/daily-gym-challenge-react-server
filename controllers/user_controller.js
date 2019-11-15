@@ -4,87 +4,40 @@ const jwtService = require('../services/jwt_service');
 var express = require('express');
 var router = express.Router();
 
-router.post('/login', function (request, response) {
-    const data = request.body;
+router.route('/login')
+    .post(userService.login);
 
-    if (userService.isValidLogin(data)) {
-        userService.login(data).then(
-            result => {
-                response.status(200).json(result);
-            }, 
-            error => {
-                response.status(403).json({ message: error.message, field: error.field });
-        }).catch((error) => {
-            response.status(500).json({ message: error.message });
-        });
-    } else {
-        response.status(500).json({ 'error': 'missing fields' });
-    }
-});
+router.route('/register')
+    .post(userService.register);
 
-router.post('/register', function (request, response) {
-    const data = request.body;
+router.route('/all')
+    .get(userService.getAllUsers);
 
-    if (userService.isValidRegister(data)) {
-        userService.register(data).then((result) => {
-            response.status(200).json(result);
-        }, error => {
-            response .status(422).json({ field : error.field, message: error.message });
-        }).catch((error) => {
-            response.status(500).json({ field : error.field, message: error.message });
-        });
-    } else {
-        response.status(500).json({ 'error': 'missing fields' });
-    }
-});
+router.route('/top')
+    .get(userService.getTopList);
 
-router.get('/all', function (request, response) {
-    userService.getAllUsers().then((users) => {
-        response.status(200).json({ 'users': users });
-    }).catch((error) => {
-        response.status(500).json({ 'error': error.message });
-    });
-});
+router.route('/:userId')
+    .get(userService.getUser)
+    .put(userService.updateUser);
 
-router.get('/top', function (request, response) {
-    userService.getTopList()
-        .then((topList) => {
-            response.status(200).json(topList);
-         }).catch((error) => {
-            response.status(500).json({ 'error': error.message });
-        });
-});
+router.route('/:userId/all')
+    .get(userService.getAllUsersModified);
 
-router.get('/:userId/all', function (request, response) {
-    let userId = request.params.userId;
-    userService.getAllUsersModified(userId).then((users) => {
-        response.status(200).json(users);
-    }).catch((error) => {
-        response.status(500).json({ 'error': error.message });
-    });
-});
+router.route('/:userId/challenge/:challengeId')
+    .get(userService.hasUserChallenge)
+    .post(userService.addChallengeToUser);
 
-router.get('/:userId', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUser(userId)
-        .then((user) => {
-            response.status(200).json(user);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
-
-router.put('/:userId', function (request, response) {
-    let userId = request.params.userId
-        , data = request.body.data
-    ;
-    userService.updateUser(userId, data)
-        .then((user) => {
-            response.status(200).json(user);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
+// router.get('/:userId/challenge/:challengeId', function (request, response) {
+//     let userId = request.params.userId
+//         , challengeId = request.params.challengeId
+//     ;
+//     userService.hasUserChallenge(userId, challengeId)
+//         .then((resp) => {
+//             response.status(200).json(resp);
+//         }).catch((error) => {
+//             response.status(500).json(error);
+//         });
+// });
 
 router.get('/:userId/challenges/all', function (request, response) {
     let userId = request.params.userId;
@@ -126,18 +79,6 @@ router.get('/:userId/challenges/unassigned', function (request, response) {
         });
 });
 
-router.post('/:userId/challenge/:challengeId', function (request, response) {
-    let userId = request.params.userId
-        , challengeId = request.params.challengeId
-    ;
-    userService.addChallengeToUser(userId, challengeId)
-        .then((user) => {
-            response.status(200).json(user);
-        }).catch((error) => {
-            response.status(500).json({ 'error': error }); 
-        });
-});
-
 router.delete('/:userId/challenge/:challengeId', function (request, response) {
     let userId = request.params.userId
         , challengeId = request.params.challengeId
@@ -147,18 +88,6 @@ router.delete('/:userId/challenge/:challengeId', function (request, response) {
             response.status(200).json(user);
          }).catch((error) => {
             response.status(500).json({ 'error': error });
-        });
-});
-
-router.get('/:userId/challenge/:challengeId', function (request, response) {
-    let userId = request.params.userId
-       , challengeId = request.params.challengeId
-    ;
-    userService.hasUserChallenge(userId, challengeId)
-        .then((resp) => {
-            response.status(200).json(resp);
-        }).catch((error) => {
-            response.status(500).json(error);
         });
 });
 
