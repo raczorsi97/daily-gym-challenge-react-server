@@ -14,6 +14,7 @@ var Challenge = new Schema({
     , abandoned: Array
     , ratings: Array
     , rating: Number
+    , status: String
 });
 
 module.exports = mongoose.model('ChallengeModel', Challenge, 'Challenges');

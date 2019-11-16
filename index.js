@@ -17,7 +17,8 @@ mongoose.connect(mongooseUri, { useNewUrlParser: true })
         console.log('Connected...');
     })
     .catch( error => {
-        console.log('Something went wrong...');
+        console.log('Something went wrong...', error);
+        
     });
 
 

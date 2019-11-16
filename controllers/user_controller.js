@@ -25,94 +25,25 @@ router.route('/:userId/all')
 
 router.route('/:userId/challenge/:challengeId')
     .get(userService.hasUserChallenge)
-    .post(userService.addChallengeToUser);
+    .post(userService.addChallengeToUser)
+    .delete(userService.removeUsersChallenge);
 
-// router.get('/:userId/challenge/:challengeId', function (request, response) {
-//     let userId = request.params.userId
-//         , challengeId = request.params.challengeId
-//     ;
-//     userService.hasUserChallenge(userId, challengeId)
-//         .then((resp) => {
-//             response.status(200).json(resp);
-//         }).catch((error) => {
-//             response.status(500).json(error);
-//         });
-// });
+router.route('/:userId/challenge/:challengeId/complete')
+    .post(userService.completeUsersChallenge);
 
-router.get('/:userId/challenges/all', function (request, response) {
-    let userId = request.params.userId;
-    userService.getAllChallengesWithStatus(userId)
-        .then((challenges) => {
-            response.status(200).json(challenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
+router.route('/:userId/challenge/:challengeId/reset')
+    .post(userService.resetUsersChallenge);
 
-router.get('/:userId/challenges', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUsersChallenges(userId)
-        .then((challenges) => {
-            response.status(200).json(challenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
+router.route('/:userId/challenges')
+    .get(userService.getUsersChallenges);
 
-router.get('/:userId/challenges/count', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUsersChallengeCounts(userId)
-        .then((challenges) => {
-            response.status(200).json(challenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
+router.route('/:userId/challenges/unassigned')
+    .get(userService.getUnassignedChallengesToUser);
 
-router.get('/:userId/challenges/unassigned', function (request, response) {
-    let userId = request.params.userId;
-    userService.getUnassignedChallengesToUser(userId)
-        .then((unassignedChallenges) => {
-            response.status(200).json(unassignedChallenges);
-         }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
+router.route('/:userId/challenges/count')
+    .get(userService.getUsersChallengeCounts);
 
-router.delete('/:userId/challenge/:challengeId', function (request, response) {
-    let userId = request.params.userId
-        , challengeId = request.params.challengeId
-    ;
-    userService.removeUsersChallenge(userId, challengeId)
-        .then((user) => {
-            response.status(200).json(user);
-         }).catch((error) => {
-            response.status(500).json({ 'error': error });
-        });
-});
+router.route('/:userId/challenges/all')
+    .get(userService.getAllChallengesWithStatus);
 
-router.post('/:userId/challenge/:challengeId/complete', function (request, response) {
-    let userId = request.params.userId
-       , challengeId = request.params.challengeId
-    ;
-    userService.completeUsersChallenge(userId, challengeId)
-        .then((resp) => {
-            response.status(200).json(resp);
-        }).catch((error) => {
-            response.status(500).json(error);
-        });
-});
-
-router.post('/:userId/challenge/:challengeId/reset', function (request, response) {
-    let userId = request.params.userId
-        , challengeId = request.params.challengeId
-    ;
-    userService.resetUsersChallenge(userId, challengeId)
-        .then((user) => {
-            response.status(200).json(user);
-        }).catch((error) => {
-            response.status(500).json({ 'error': error }); 
-        });
-});
- 
 module.exports = router;

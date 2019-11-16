@@ -3,7 +3,7 @@ const jwtService = require('../services/jwt_service');
 const userDAO = require('../daos/user_dao');
 
 const UserModel = require('../schemas/userSchema')
-    , ChallenngeModel = require('../schemas/challengeSchema');
+    , ChallengeModel = require('../schemas/challengeSchema');
 
 function isValidLogin(data) {
     return (isDataExists(data.username) && isDataExists(data.password));
@@ -21,7 +21,6 @@ function isValidRegister(data) {
 function isDataExists(field) {
     return (!lodash.isUndefined(field) && !lodash.isEmpty(field.trim()));
 }
-
 
 login = function(req, res) {
     let data = req.body;
@@ -122,111 +121,270 @@ addChallengeToUser = function(req, res) {
         if (err) {
             return res.status(500).send(err);
         }
-        UserModel.findOne({ _id: userId}, function(err, user) {
+
+        ChallengeModel.findOneAndUpdate({ _id: challengeId}, { $push: { in_progress: userId }}, function(err, resp) {
             if (err) {
                 return res.status(500).send(err);
             }
-            console.log('Challenge added :', user);
-            return res.json(user);
+            UserModel.findOne({ _id: userId }, function(err, user) {
+                if (err) {
+                    return res.status(500).send(err);
+                }
+                return res.json(user);
+            });
         });
     });
 }
 
-async function addChallengeToUser(userId, challengeId) {
-    return await userDAO.addChallengeToUser(userId, challengeId)
-        .then((user) => {
-            return user;
-        }).catch((error) => {
-            throw error.message;
-        });
-}
-
-async function removeUsersChallenge(userId, challengeId) {
-    return await userDAO.removeUsersChallenge(userId, challengeId)
-        .then((user) => {
-            return user;
-        }).catch((error) => {
-            throw error.message;
-        });
-}
-
-async function completeUsersChallenge(userId, challengeId) {
-    return await userDAO.completeUsersChallenge(userId, challengeId)
-        .then((user) => {
-            return user;
-        }).catch((error) => {
-            throw error.message;
-        });
-}
-
-async function resetUsersChallenge(userId, challengeId) {
-    return await userDAO.resetUsersChallenge(userId, challengeId)
-        .then((user) => {
-            return user;
-        }).catch((error) => {
-            throw error.message;
-        });
-}
-
-async function getUsersChallenges(userId) {
-    return await userDAO.getUsersChallenges(userId)
-        .then((challenges) => {
-            return challenges;
-        }).catch((error) => {
-            throw error.message;
+removeUsersChallenge = function(req, res) {
+    let userId = req.params.userId
+        , challengeId = req.params.challengeId
+    ;
+    UserModel.findOneAndUpdate({ _id: userId }, { $push: { abandoned_challenges: challengeId }}, function(err, user) {
+        if (err) {
+            return res.status(500).send(err.errmsg);
         }
-    );
+
+        ChallengeModel.findOneAndUpdate(
+            { _id: challengeId }, {$push: { abandoned: userId }, $pull: { in_progress: userId }}, function(err, challenge) {
+                if (err) {
+                    return res.status(500).send(err.errmsg);
+                }
+                UserModel.findOne({ _id: userId}, function(err, user) {
+                    if (err) {
+                        return res.status(500).send(err.errmsg);
+                    }
+                    res.json(user);
+                });
+        });
+    });
 }
 
-async function getUnassignedChallengesToUser(userId) {
-    return await userDAO.getUnassignedChallengesToUser(userId)
-        .then((unassignedChallenges) => {
-            return unassignedChallenges;
-        }).catch((error) => {
-            throw error.message;
+completeUsersChallenge = function(req, res) {
+    let userId = req.params.userId
+        , challengeId = req.params.challengeId
+    ;
+    UserModel.findOneAndUpdate({ _id: userId }, { $push: { completed_challenges: challengeId }}, function(err, user) {
+        if (err) {
+            return res.status(500).send(err.errmsg);
         }
-    );
+
+        ChallengeModel.findOneAndUpdate(
+            { _id: challengeId }, {$push: { completed: userId }, $pull: { in_progress: userId }}, function(err, challenge) {
+                if (err) {
+                    return res.status(500).send(err.errmsg);
+                }
+                UserModel.findOne({ _id: userId}, function(err, user) {
+                    if (err) {
+                        return res.status(500).send(err.errmsg);
+                    }
+                    res.json(user);
+                });
+        });
+    });
+}
+
+resetUsersChallenge = function(req, res) {
+    let userId = req.params.userId
+        , challengeId = req.params.challengeId
+    ;
+    UserModel.findOneAndUpdate(
+        { _id: userId }, { $pull: { challenges: challengeId, abandoned_challenges: challengeId }}, function(err, user) {
+            if (err) {
+                return res.status(500).send(err.errmsg);
+            }
+            ChallengeModel.findOneAndUpdate({ _id: challengeId }, {$pull: { abandoned: userId }}, function(err, challenge) {
+                    if (err) {
+                        return res.status(500).send(err.errmsg);
+                    }
+
+                    UserModel.findOne({ _id: userId}, function(err, user) {
+                        if (err) {
+                            return res.status(500).send(err.errmsg);
+                        }
+                        res.json(user);
+                    });
+            });
+    });
+}
+
+getUsersChallenges = function(req, res) {
+    let userId = req.params.userId
+        , allChallenges = []
+        , completedChallenges = []
+        , abandonedChallenges = []
+        , inProgressChallenges = []
+    ;
+    ChallengeModel.find({}, function(err, challenges) {
+        if (err) {
+            return res.status(500).send(err.errmsg)
+        }
+
+        UserModel.findOne({ _id: userId}, function(err, user) {
+            if (err) {
+                return res.status(500).send(err.errmsg)
+            }
+
+            challenges.forEach( ch => {
+                user.completed_challenges.forEach( uCh => {
+                    if (ch._id == uCh) {
+                        ch.status = 'completed';
+                        completedChallenges.push(ch);
+                    }
+                });
+            });
+            challenges.forEach( ch => {
+                user.abandoned_challenges.forEach( uCh => {
+                    if (ch._id == uCh) {
+                        ch.status = 'abandoned';
+                        abandonedChallenges.push(ch);
+                    }
+                });
+            });
+            challenges.forEach( ch => {
+                user.challenges.forEach( uCh => {
+                    if (ch._id == uCh) {
+                        if (!ch.status || ch.status == 'in_progress') {
+                            ch.status = 'in_progress';
+                            inProgressChallenges.push(ch);
+                        }
+                        allChallenges.push(ch);
+                    }
+                });
+            });
+            return res.json({
+                challenges: allChallenges
+                , completedChallenges: completedChallenges
+                , abandonedChallenges: abandonedChallenges
+                , inProgressChallenges: inProgressChallenges
+            } );
+        });
+    });
+}
+
+getUnassignedChallengesToUser = function(req, res) {
+    let userId = req.params.userId;
+    ChallengeModel.find({}, function(err, challenges) {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+
+        UserModel.findOne({ _id: userId }, function(err, user) {
+            if (err) {
+                return res.status(500).send(err.errmsg);
+            }
+            let unassignedChallenges = challenges.filter((challenge) => {
+                let index = user.challenges.findIndex( uCh => uCh == challenge._id);
+                return (index < 0);
+            });
+            return res.json(unassignedChallenges);
+        });
+    });
 }
 
 hasUserChallenge = function(req, res) {
     let userId = req.params.userId
         , challengeId = req.params.challengeId
     ;
-    UserModel.find({ _id: userId, challenges: { $in: challengeId }}, function(err, user) {
+    UserModel.findOne({ _id: userId }, function(err, user) {
         if (err) {
             return res.status(500).send(err);
         }
         if (!user) {
             return res.json(false);
         } else {
-            return res.json(user);
+            if ( user.challenges.includes(challengeId) ) {
+                ChallengeModel.findOne({ _id: challengeId }, function(err, challenge) {
+                    if (err) {
+                        return res.status(500).send(err);
+                    }
+                    challenge.status = 'in_progress';
+                    if ( user.completed_challenges.includes(challengeId)) {
+                        challenge.status = 'completed';
+                    }
+
+                    if ( user.abandoned_challenges.includes(challengeId)) {
+                        challenge.status = 'abandoned';
+                    }
+
+                    return res.json(challenge);
+                });
+            } else {
+                return res.json(false);
+            }
         }
-    })
-    // return await userDAO.hasUserChallenge(userId, challengeId)
-    //     .then((resp) => {
-    //         return resp;
-    //     }).catch((error) => {
-    //         throw error.message;
-    //     }
-    // );
+    });
 }
 
-async function getAllChallengesWithStatus(userId) {
-    return await userDAO.getAllChallengesWithStatus(userId)
-        .then((resp) => {
-            return resp;
-        }).catch((error) => {
-            throw error.message;
+getAllChallengesWithStatus = (req, res) => {
+    let userId = req.params.userId
+        , allChallenges = []
+    ;
+    ChallengeModel.find({}, (err, challenges) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        challenges.forEach( challenge => {
+            let index = challenge.completed.findIndex(uId => uId == userId);
+            if ( index > -1 ) {
+                allChallenges.push({ name: challenge.title, status: 'completed' });
+            } else {
+                index = challenge.abandoned.findIndex(uId => uId == userId);
+                if ( index > -1 ) {
+                    allChallenges.push({ name: challenge.title, status: 'abandoned' });
+                } else {
+                    index = challenge.in_progress.findIndex( uId => uId == userId);
+                    if ( index > -1 ) {
+                        allChallenges.push({ name: challenge.title, status: 'in_progress' });
+                    } else {
+                        allChallenges.push({ name: challenge.title, status: 'ready_to_start' });
+                    }
+                }
+            }
         });
+        return res.json(allChallenges);
+    });
 }
 
-async function getUsersChallengeCounts(userId) {
-    return await userDAO.getUsersChallengeCounts(userId)
-        .then((resp) => {
-            return resp;
-        }).catch((error) => {
-            throw error.message;
+getUsersChallengeCounts = function(req, res) {
+    let userId = req.params.userId
+        , allChallenges = []
+        , completedChallenges = []
+        , abandonedChallenges = []
+        , inProgressChallenges = []
+    ;
+    ChallengeModel.find({}, function(err, challenges) {
+        if (err) {
+            return res.status(500).send(err.errmsg)
+        }
+
+        UserModel.findOne({ _id: userId}, function(err, user) {
+            if (err) {
+                return res.status(500).send(err.errmsg)
+            }
+            challenges.forEach( ch => {
+                user.completed_challenges.forEach( uCh => {
+                    (ch._id == uCh) && completedChallenges.push(ch);
+                });
+            });
+            challenges.forEach( ch => {
+                user.abandoned_challenges.forEach( uCh => {
+                    (ch._id == uCh) && abandonedChallenges.push(ch);
+                });
+            });
+            challenges.forEach( ch => {
+                user.challenges.forEach( uCh => {
+                    (ch._id == uCh) && inProgressChallenges.push(ch);
+                    allChallenges.push(ch);
+                });
+            });
+            return res.json({
+                completed: completedChallenges.length
+                , abandoned: abandonedChallenges.length
+                , inProgress: inProgressChallenges.length
+            } );
         });
+    });
 }
 
 module.exports = {
