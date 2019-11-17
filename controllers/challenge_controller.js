@@ -6,23 +6,11 @@ const challengeService = require('../services/challenge_service');
 router.route('/all')
     .get(challengeService.getAllChallenges);
 
-router.get('/:id/percentage', function (request, response) {
-    challengeService.getChallengePercentage(request.params.id)
-        .then((data) => {
-            response.status(200).json(data);
-         }).catch((error) => {
-            response.status(500).json({ 'error': error.message });
-        });
-});
+router.route('/:id/percentage')
+    .get(challengeService.getChallengePercentage);
 
-router.get('/:id', function (request, response) {
-    challengeService.getChallengeById(request.params.id)
-        .then((challenge) => {
-            response.status(200).json({ 'challenge': challenge });
-         }).catch((error) => {
-            response.status(500).json({ 'error': error.message });
-        });
-});
+router.route('/:id')
+    .get(challengeService.getChallengeById);
 
 router.get('/:id/rating', function (request, response) {
     let challengeId = request.params.id;

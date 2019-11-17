@@ -1,6 +1,7 @@
 // const challengeDAO = require('../daos/challenge_dao');
 
-const ChallengeModel = require('../schemas/challengeSchema');
+const UserModel = require('../schemas/userSchema')
+    , ChallengeModel = require('../schemas/challengeSchema');
 
 getAllChallenges = function(req, res) {
     ChallengeModel.find({}, function(err, challenges) {
@@ -11,22 +12,42 @@ getAllChallenges = function(req, res) {
     });
 }
 
-async function getChallengeById(id) {
-    return await challengeDAO.getChallengeById(id)
-        .then((challenge) => {
-            return challenge;
-        }).catch((error) => {
-            throw new Error(error.message);
-        });
+getChallengeById = function(req, res) {
+    ChallengeModel.findOne({ _id: req.params.id }, (err, challenge) => {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+        return res.json(challenge);
+    });
 }
 
-async function getChallengePercentage(id) {
-    return await challengeDAO.getChallengePercentage(id)
-        .then((percentage) => {
-            return percentage;
-        }).catch((error) => {
-            throw new Error(error.message);
-        });
+getChallengePercentage = function(req, res) {
+    ChallengeModel.findOne({ _id: req.params.id}, (err, challenge) => {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+        UserModel.find({}, (err, users) => {
+            if (err) {
+                return res.status(500).send(err.errmsg);
+            }
+            let  allUsers = users.length
+                , inProgressCount = challenge.in_progress.length
+                , completedCount = challenge.completed.length
+                , abandonedCount = challenge.abandoned.length
+                , inProgressPercentage = (inProgressCount * 100) / allUsers
+                , completedPercentage = (completedCount * 100) / allUsers
+                , abandonedPercentage = (abandonedCount * 100) / allUsers
+                , notAssignedPercentage = 100 - (inProgressPercentage + completedPercentage + abandonedPercentage)
+            ;
+            return res.json({
+                rating: challenge.rating
+                , inProgressPercentage
+                , completedPercentage
+                , abandonedPercentage
+                , notAssignedPercentage
+            });
+        }); 
+    });
 }
 
 async function getChallengeRating(id) {
