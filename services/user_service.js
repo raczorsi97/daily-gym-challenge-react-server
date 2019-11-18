@@ -1,6 +1,6 @@
-const lodash = require('lodash');
-const jwtService = require('../services/jwt_service');
-const userDAO = require('../daos/user_dao');
+const lodash = require('lodash')
+    , jwtService = require('../services/jwt_service')
+;
 
 const UserModel = require('../schemas/userSchema')
     , ChallengeModel = require('../schemas/challengeSchema');
