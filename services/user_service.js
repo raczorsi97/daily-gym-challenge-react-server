@@ -5,10 +5,6 @@ const userDAO = require('../daos/user_dao');
 const UserModel = require('../schemas/userSchema')
     , ChallengeModel = require('../schemas/challengeSchema');
 
-function isValidLogin(data) {
-    return (isDataExists(data.username) && isDataExists(data.password));
-}
-
 function isValidRegister(data) {
     return (
         isDataExists(data.username) && 
@@ -24,12 +20,15 @@ function isDataExists(field) {
 
 login = function(req, res) {
     let data = req.body;
-    UserModel.findOne({ username: data.username, password: data.password } , function (err, user) {
+    UserModel.findOne({ username: data.username } , function (err, user) {
         if (err) {
             return res.status(500).send(err.errmsg);
         }
         if (!user) {
-            return res.status(500).send('User not found');
+            return res.status(500).send({ field: 'username', message: 'Invalid username' });
+        }
+        if (user.password != data.password) {
+            return res.status(500).send({ field: 'password', message: 'Invalid passoword' });
         }
         let token = jwtService.generateUserToken(user);
         return res.json({ token, user });
@@ -39,12 +38,28 @@ login = function(req, res) {
 register = function(req, res) {
     let data = req.body;
     if (isValidRegister(data)) {
-        UserModel.create(data, function (err, user) {
+        UserModel.findOne({ username: data.username }, (err, user) => {
             if (err) {
                 return res.status(500).send(err.errmsg);
             }
-            let token = jwtService.generateUserToken(user);
-            return res.json({ token, user });
+            if (user) {
+                return res.status(500).send({ field: 'username', message: 'This username is already taken!'});
+            }
+            UserModel.findOne({ email: data.email }, (err, user) => {
+                if (err) {
+                    return res.status(500).send(err.errmsg);
+                }
+                if (user) {
+                    return res.status(500).send({ field: 'email', message: 'This email is already taken!'});
+                }
+                UserModel.create(data, function (err, user) {
+                    if (err) {
+                        return res.status(500).send(err.errmsg);
+                    }
+                    let token = jwtService.generateUserToken(user);
+                    return res.json({ token, user });
+                });
+            });
         });
     } else {
         return res.status(500).send({ error: 'missing fields' });
@@ -392,7 +407,6 @@ module.exports = {
     , register
     , getUser
     , updateUser
-    , isValidLogin
     , isValidRegister
     , getAllUsers
     , addChallengeToUser
