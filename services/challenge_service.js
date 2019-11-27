@@ -1,5 +1,3 @@
-// const challengeDAO = require('../daos/challenge_dao');
-
 const UserModel = require('../schemas/userSchema')
     , ChallengeModel = require('../schemas/challengeSchema');
 
@@ -50,22 +48,33 @@ getChallengePercentage = function(req, res) {
     });
 }
 
-async function getChallengeRating(id) {
-    return await challengeDAO.getChallengeRating(id)
-        .then((percentage) => {
-            return percentage;
-        }).catch((error) => {
-            throw new Error(error.message);
-        });
+getChallengeRating = function(req, res) {
+   ChallengeModel.find({ _id: req.params.id}, (err, challenge) => {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+        return res.json(challenge.rating);
+   });
 }
 
-async function rateChallenge(challengeId, rating) {
-    return await challengeDAO.rateChallenge(challengeId, rating)
-        .then((challenge) => {
-            return challenge;
-        }).catch((error) => {
-            throw new Error(error.message);
+rateChallenge = function(req, res) {
+    let challengeId = req.params.id
+        , rating = req.params.rating
+    ;
+    ChallengeModel.findOneAndUpdate({ _id: challengeId }, {$push: {ratings: rating}}, (err, challenge) => {
+        if (err) {
+            return res.status(500).send(err.errmsg);
+        }
+        let sum  = challenge.ratings.reduce((a, b) => a + b, 0)
+            , rating = (sum/challenge.ratings.length).toFixed(2)
+        ;
+        ChallengeModel.findOneAndUpdate({ _id: challengeId }, { rating }, (err, challenge) => {
+            if (err) {
+                return res.status(500).send(err.errmsg);
+            }
+            return res.json(challenge);
         });
+    });
 }
 
 module.exports = {
